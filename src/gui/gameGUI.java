@@ -21,6 +21,7 @@ public class gameGUI extends JFrame {
 		setEastPanel();
 		setSouthPanel(); 
 		setWestPanel(); 
+		setCenterPanel();
 		
 		this.add(mainPanel);
 				
@@ -80,6 +81,17 @@ public class gameGUI extends JFrame {
 		addToMainPanel(westPan, 'w');
 	}
 	
+	private void setCenterPanel()
+	{
+		JPanel centerPan = new JPanel(); 
+		centerPan.setLayout(new FlowLayout());
+			
+		JLabel temp = new JLabel("replace with picture");
+		centerPan.add(temp);
+		
+		addToMainPanel(centerPan, 'c');
+	}
+	
 	
 	// ===== helper methods
 	
@@ -111,6 +123,10 @@ public class gameGUI extends JFrame {
 		}else if(borderSide == 'w')
 		{
 			mainPanel.add(panelToAdd, BorderLayout.WEST);
+		}
+		else if(borderSide == 'c')
+		{
+			mainPanel.add(panelToAdd, BorderLayout.CENTER);
 		}
 		
 		mainPanel.revalidate();
