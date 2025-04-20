@@ -1,0 +1,20 @@
+there are 2 main methods, a client and server main. 
+this is where the client's main is going to be held.
+this is also where the client side of the server will be handled
+there is not much logic to be done here, this is mostly just the driver classes
+
+
+:: the classes are :: 
+
+- clientMain - 
+
+this is the where the main method is, it will handle server connection
+and potentially the player's GUI
+there are two central methods, autoConnect and manualConnect. 
+AutoConnect is going to attempt to try to connect to server without the user having to input port# or anything. 
+if autoconnect fails, manual connect will connect by having them enter the port# and etc. 
+
+- gameClient - 
+
+this is the class that handles sending and recieveing messages from the server.
+it is what connects to the server. 

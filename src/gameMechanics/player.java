@@ -23,11 +23,12 @@ public class player implements Serializable{
 	}
 	public void manipMoney(int money)
 	{
-		money += money; 
+		this.money += money; 
 	}
 	
-	
-	
+	public int getMoney() {return money; }
+	public String getUsername() {return username; }
+	public int getBoardPostition() {return boardPosition;}
 	
 	
 }

@@ -1,0 +1,48 @@
+this package is in charge of all of the game mechanics used throughout the game
+the core logic is held here. This will be used in the server and GUI.
+Essentially this package holds the back end for the game
+
+
+
+:: the two central classes are :: 
+
+
+
+- gameLogic -
+
+Handles the logic for each player action.
+It receives an action request from a player, interprets it, and applies the corresponding updates to the game state. 
+This is where the rules of the game are enforced
+
+
+- gameState -
+
+Represents the current state of the game.
+It holds all player info, tile ownership, board layout, and turn data. 
+This object is passed between clients and the server to keep everyone in sync.
+
+
+
+:: the helping classes are :: 
+
+- myAction - this is an action's class that holds what player made a move and the move they made
+
+A simple data class that records an action a player wants to take.
+It stores the player ID and a string describing the action ("ROLL", "BUY_TILE", etc).
+
+
+- player - 
+
+encapsulates all information about a player — including username, money, board position, and status (active/inactive).
+
+
+- tileInfo - 
+
+Represents a tile on the game board.
+Includes details like tile type, cost, rent, position, and ownership status.
+
+
+
+
+
+

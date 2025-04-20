@@ -7,7 +7,7 @@ public class myAction implements Serializable
 	private int playerID; 
 	private String playerMove; 
 	
-	myAction(int playerId,String playerMove)
+	public myAction(int playerId,String playerMove)
 	{
 		playerID = playerId; 
 		this.playerMove = playerMove; 

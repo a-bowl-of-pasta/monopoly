@@ -1,0 +1,15 @@
+this is the server stuff. 
+the server will be created from here. 
+this is what will display the GUI.
+
+
+ :: the classes :: 
+ 
+ - gameServer - 
+ 
+ this is the server itself, it is in charge of sending and receiving messages from and to clients. 
+ 
+ 
+ - serverMain -
+ 
+ this is the class that creates a gameServer class. 

@@ -1,21 +1,23 @@
 package serverBackend;
 
 import ocsf.server.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import clientBackend.clientLogic;
+import clientBackend.gameClient;
 import gameMechanics.gameLogic;
 import gameMechanics.gameState;
 import gameMechanics.myAction; 
 
-public class serverLogic extends AbstractServer {
+public class gameServer extends AbstractServer {
 
-	private ArrayList<clientLogic> connectedPlayers; 
+	private ArrayList<gameClient> connectedPlayers; 
 	private int maxPlayers; 
 	private gameState currentState;
 	private gameLogic gameActions; 
 	
 	// ========= adds a new client to the current players
-	protected void addClient(clientLogic clientToAdd)
+	protected void addClient(gameClient clientToAdd)
 	{
 		System.out.println("new player joining");
 		
@@ -37,29 +39,41 @@ public class serverLogic extends AbstractServer {
         System.out.println("Received from client: " + message);
 
 		
-        // ------- sends player actions to game logic
-	     if (message instanceof myAction) {
-	            gameActions.performGameAction(message, client, currentState); 
-	        } else {
-	            System.out.println("Unknown message type.");
+        // ------- sends player actions to game logic i
+        
+        try {
+        	if (message instanceof myAction) {
+	    	 
+	   	 		gameState state = new gameState();  	
+				client.sendToClient(state);
+			
+	         //   gameActions.performGameAction(message, client, currentState); 
+	     	} else {
+	           	System.out.println("Unknown message type.");
 	        }
+	        
+	    
+        } catch (IOException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
 	//======= constructors
 	private void initializeAll()
 	{		
-		connectedPlayers = new ArrayList<clientLogic>(); 
+		connectedPlayers = new ArrayList<gameClient>(); 
 		maxPlayers = 2; 
 		currentState = new gameState(); 
 	}
-	serverLogic(int port) 
+	gameServer(int port) 
 	{
 		super(port);
 		this.setTimeout(0);
 		initializeAll(); 
 	}
-	serverLogic()
+	gameServer()
 	{
 		super(12345);
 		this.setTimeout(0);

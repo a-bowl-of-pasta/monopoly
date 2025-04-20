@@ -1,71 +1,75 @@
 package gameMechanics;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Random;
 import ocsf.server.ConnectionToClient; 
 
 public class gameLogic implements Serializable{
 
-	private static int[] dice; 
 	
 	// ============= performs the action and changes gameState
-	public void performGameAction(Object action, ConnectionToClient client, gameState currentState)
-	{
-			
-		
-		int playerID = ((myAction) action).getPlayerID(); 
-		String playerMove = ((myAction) action).getPlayerMove(); 
-		
-		if(playerMove == "ROLL")
-		{
-			rollDice(); 
-			
-		}else if (playerMove == "BUY_TILE")
-		{
-			
-			
-			
-		}else if(playerMove == "SELL_TILE")
-		{
-			
-			
-			
-		}else if(playerMove == "END_TURN")
-		{
-			
-			
-			
-		}
-		
-		
-	}
+	public void performGameAction(Object action, ConnectionToClient client, gameState currentState) {
+	    if (!(action instanceof myAction)) return;
 
+	    myAction move = (myAction) action;
+	    
+	    int playerID = move.getPlayerID();
+	    
+	    String playerMove = move.getPlayerMove();
+	    player currentPlayer = currentState.currentPlayerObj();
+
+	    switch (playerMove) {
+	        case "ROLL":
+	            int roll = rollDice();
+	            currentPlayer.moveOnBoard(roll);
+	            manageTile(currentPlayer, currentState);
+	            System.out.println("Player " + playerID + " rolled " + roll);
+	            break;
+
+	        case "BUY_TILE":
+	            buyTile(currentPlayer, currentState);
+	            break;
+
+	        case "SELL_TILE":
+	            sellTile(currentPlayer, currentState);
+	            break;
+
+	        case "END_TURN":
+	            currentState.nextPlayersTurn();
+	            break;
+
+	        default:
+	            System.out.println("Unknown move: " + playerMove);
+	    }
+
+	    currentState.checkGameOver();
+	}
 	// =========== basic game logic 
 
-	public void rollDice()
+	public int rollDice()
 	{
 		Random random = new Random(System.currentTimeMillis());
 		
-		boolean firstNumGenerated = false;
-		boolean secondNumGenerated = false;
+		int dice1 = random.nextInt(6) +1;
+		int dice2 = random.nextInt(6) +1; 
 		
-		while(firstNumGenerated == false && secondNumGenerated == false)
-		{
-			if(firstNumGenerated != true)
-			{
-				
-			}
-			else if(secondNumGenerated != true)
-			{
-				
-			}
-				
-		}
+		return dice1 + dice2; 
 			
 	}
 	
-	private void manageTile()
+	private void manageTile(player currentPlayer, gameState currentGameState)
 	{
+		
+		 tileInfo tile = currentGameState.getTileAt(currentPlayer.getBoardPostition());
+		 HashMap<tileInfo, player> propertiesOwned = currentGameState.propertiesOwnedHashMap(); 
+
+		    if (tile.isOwned() && !propertiesOwned.get(tile).equals(currentPlayer)) {
+		        int rent = tile.getRent();
+		        currentPlayer.manipMoney(-rent);
+		        currentGameState.propertiesOwned.get(tile).manipMoney(rent); // pay to owner
+		        System.out.println("Paid rent of " + rent);
+		    }
 		
 	}
 	
@@ -73,24 +77,30 @@ public class gameLogic implements Serializable{
 	
 	// ============ helper methods
 	
-	private void sellTile()
+	private void sellTile(player currentPlayer, gameState currentgameState)
 	{
 		
-	}
-	private void buyTile()
-	{
+		
+		
 		
 	}
-	private int diceRollLogic(Random rand)
+	private void buyTile(player currentPlayer, gameState currentGameState)
 	{
-		int roll = rand.nextInt();
-		return roll; 
+		 tileInfo currentTile = currentGameState.getTileAt(currentPlayer.getBoardPostition()); 
+		    
+		 if (!currentTile.isOwned() && currentPlayer.getMoney() >= currentTile.getPrice()) {
+		 
+			 currentPlayer.manipMoney(- currentTile.getPrice());
+			 currentGameState.boughtProperty(currentTile, currentPlayer);
+			 currentTile.tileBought();
+			 
+		    
+		 }
+		
+		
 	}
 	// ================ constructor 
-	gameLogic(){
-		dice = new int[2];
-		
-	}
+	gameLogic(){}
 	
 }
 

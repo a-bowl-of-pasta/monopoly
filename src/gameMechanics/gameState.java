@@ -12,6 +12,7 @@ public class gameState implements Serializable{
 	private int totalTiles; 
 	ArrayList<player> playerList; 
 	HashMap<tileInfo, player>propertiesOwned;
+	ArrayList<tileInfo> linearBoard; 
 	
 	public gameState()
 	{
@@ -20,6 +21,7 @@ public class gameState implements Serializable{
 		numOfPlayers = 0; 
 		playerList = new ArrayList<player>();
 		totalTiles = 40; 
+		linearBoard = new ArrayList<tileInfo>(); 
 
 		
 
@@ -40,18 +42,57 @@ public class gameState implements Serializable{
 	}
 	public void nextPlayersTurn()
 	{
-		currentPlayerIndex = (currentPlayerIndex +1) % numOfPlayers - 1; 
+		currentPlayerIndex = nextPlayerIndex;  
+		nextPlayerIndex = (nextPlayerIndex +1) % numOfPlayers; 
 	}
 	public void boughtProperty(tileInfo tileBought, player ownerPlayer)
 	{
-		propertiesOwned.put(tileBought, ownerPlayer); 
+		if(propertiesOwned.containsKey(tileBought) == false)
+		{
+			propertiesOwned.put(tileBought, ownerPlayer); 
+		}
 	}
 	public void soldProperty(tileInfo tileSold, player soldPlayer)
 	{
-		propertiesOwned.remove(tileSold); 
+		if(propertiesOwned.containsKey(tileSold) && propertiesOwned.get(tileSold).equals(soldPlayer) )
+		{
+			propertiesOwned.remove(tileSold); 
+		}
 	}
+	public void checkGameOver()
+	{
+		
+		for (player p : playerList) {
+	        
+			if (p.getMoney() <= 0) {
+	            
+				// -------- display in the GUI
+	        	System.out.println(p.getUsername() + " is out of the game!");
+	            // -------
+	        	
+	            playerList.remove(p);
+	            numOfPlayers--;
+	            break;
+	        }
+	    }
+		
+		if(numOfPlayers <= 1)
+		{
+			// -------- display in GUI
+			System.out.println("game is over"); 
+			// -------
+		}
+	}
+	// ================ getters 
 	
-
+	public int currentPlayerIndex() { return currentPlayerIndex;}
+	public player currentPlayerObj() {return playerList.get(currentPlayerIndex); }
+	public int playerCount() {return numOfPlayers;}
+	public int getNextPlayer() {return nextPlayerIndex;}
+	public player nextPlayerObj() {return playerList.get(nextPlayerIndex); }
+	public int getTileCount() {return totalTiles; }
+	public tileInfo getTileAt(int i) {return linearBoard.get(i); }
+	public HashMap<tileInfo, player> propertiesOwnedHashMap(){return propertiesOwned; }
 
 }
 
