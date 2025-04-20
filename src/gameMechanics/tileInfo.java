@@ -22,10 +22,12 @@ public class tileInfo implements Serializable{
 	
 	public void tileBought() {tileOwned = true;}
 	public boolean isOwned() { return tileOwned;}
-	public int getPrice() {return tilePrice; };
+	public void tileIsSold() {tileOwned = false; }
+	public int getPrice() {return tilePrice; }
 	public int getRent() {return rent; }
 	public String getTileType() {return tileType; }
 	public int tilePositionOnBoard() {return boardIndex; }
+	
 	
 	@Override
 	public boolean equals(Object obj) {

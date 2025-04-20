@@ -77,10 +77,21 @@ public class gameLogic implements Serializable{
 	
 	// ============ helper methods
 	
-	private void sellTile(player currentPlayer, gameState currentgameState)
+	private void sellTile(player currentPlayer, gameState currentGameState)
 	{
 		
-		
+		tileInfo currentTile = currentGameState.getTileAt(currentPlayer.getBoardPostition());
+
+	    // Check ownership
+	    if (currentGameState.propertiesOwned.containsKey(currentTile) &&
+	        currentGameState.propertiesOwned.get(currentTile).equals(currentPlayer)) {
+	        
+	        currentPlayer.manipMoney(currentTile.getPrice()); // refund full value (or 50% if you want)
+	        currentGameState.soldProperty(currentTile, currentPlayer);
+	        currentTile.tileIsSold(); 
+
+	        System.out.println("Player " + currentPlayer.getUsername() + " sold tile at " + currentTile.tilePositionOnBoard());
+	    }	
 		
 		
 	}

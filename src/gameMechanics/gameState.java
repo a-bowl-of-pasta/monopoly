@@ -22,6 +22,7 @@ public class gameState implements Serializable{
 		playerList = new ArrayList<player>();
 		totalTiles = 40; 
 		linearBoard = new ArrayList<tileInfo>(); 
+		propertiesOwned = new HashMap<tileInfo, player>(); 
 
 		
 
