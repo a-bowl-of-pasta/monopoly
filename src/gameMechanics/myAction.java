@@ -15,5 +15,9 @@ public class myAction implements Serializable
 	
 	public int getPlayerID() {return playerID; }
 	public String getPlayerMove() {return playerMove; }
-	
+
+	@Override
+	public String toString() {
+	    return "Action by Player " + playerID + ": " + playerMove;
+	}
 }

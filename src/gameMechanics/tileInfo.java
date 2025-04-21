@@ -41,5 +41,11 @@ public class tileInfo implements Serializable{
 	public int hashCode() {
 	    return Integer.hashCode(boardIndex);
 	}
-	
+
+	@Override
+	public String toString() {
+	    return "Tile[" + boardIndex + "] " + tileType + 
+	           " | Price: $" + tilePrice + " | Rent: $" + rent + 
+	           " | Owned: " + tileOwned;
+	}
 }

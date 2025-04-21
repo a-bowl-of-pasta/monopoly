@@ -22,7 +22,7 @@ public class gameLogic implements Serializable{
 	    switch (playerMove) {
 	        case "ROLL":
 	            int roll = rollDice();
-	            currentPlayer.moveOnBoard(roll);
+	            currentPlayer.moveOnBoard(roll, currentState.getTileCount());
 	            manageTile(currentPlayer, currentState);
 	            System.out.println("Player " + playerID + " rolled " + roll);
 	            break;
@@ -82,11 +82,11 @@ public class gameLogic implements Serializable{
 		
 		tileInfo currentTile = currentGameState.getTileAt(currentPlayer.getBoardPostition());
 
-	    // Check ownership
+		
 	    if (currentGameState.propertiesOwned.containsKey(currentTile) &&
 	        currentGameState.propertiesOwned.get(currentTile).equals(currentPlayer)) {
 	        
-	        currentPlayer.manipMoney(currentTile.getPrice()); // refund full value (or 50% if you want)
+	        currentPlayer.manipMoney(currentTile.getPrice()); 
 	        currentGameState.soldProperty(currentTile, currentPlayer);
 	        currentTile.tileIsSold(); 
 
@@ -107,10 +107,30 @@ public class gameLogic implements Serializable{
 			 
 		    
 		 }
-		
-		
+			
 	}
-	// ================ constructor 
+	// ================ constructor and toString / debugging
+	public String toStringGameState(Object action, ConnectionToClient client, gameState currentState)
+	{
+		return currentState.toString();
+	}
+	public String toStringAction(Object action)
+	{
+		if(action instanceof myAction)
+		{
+			return action.toString();
+		}
+		else
+		{
+			return "not a valid action"; 
+		}
+			
+	}
+	public String toStringPlayer(ConnectionToClient client, gameState currentState)
+	{
+		player currentPlay = currentState.currentPlayerObj();
+		return currentPlay.toString();  
+	}
 	gameLogic(){}
 	
 }

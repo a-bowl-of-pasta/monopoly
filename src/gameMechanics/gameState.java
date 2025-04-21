@@ -3,6 +3,7 @@ package gameMechanics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class gameState implements Serializable{
 	
@@ -94,6 +95,38 @@ public class gameState implements Serializable{
 	public int getTileCount() {return totalTiles; }
 	public tileInfo getTileAt(int i) {return linearBoard.get(i); }
 	public HashMap<tileInfo, player> propertiesOwnedHashMap(){return propertiesOwned; }
+	
+	// ======== to string and debugging
+	public String currentPlayerName()
+	{
+		
+		return playerList.get(currentPlayerIndex).getUsername();
+	}
+	public String currentPlayerInfo()
+	{
+		return playerList.get(currentPlayerIndex).toString();
+	}
+	public String printBoardOwnership()
+	{
+		if(propertiesOwned.size() > 0)
+		{
+			String ownerShipMap = "";
+			for(Map.Entry<tileInfo, player> ownerShip : propertiesOwned.entrySet())
+			{
+				ownerShipMap += "" + ownerShip.getKey() + " : "+ ownerShip.getValue() + "\n"; 
+			}
+			return ownerShipMap; 
+		}
+		else
+		{
+			return "ownership map empty, no player owns anything"; 
+		}
+	}
+	
+	public String toString() {
+	    return "GameState: " + playerCount() + " players\nCurrent turn: " + currentPlayerObj().getUsername() + "\nnext player: " +
+	    			nextPlayerObj().username + "\nproperty ownership map size :" + propertiesOwned.size();
+	}
 
 }
 

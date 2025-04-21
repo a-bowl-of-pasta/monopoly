@@ -1,42 +1,112 @@
 package clientBackend;
 
-import java.io.IOException;
+import java.util.Scanner;
 
-import gameMechanics.myAction;
+import gameMechanics.*;
+
 
 public class clientMain {
 
 	
-	public static void testGameGUI()
+	// ==================== run gui ===========
+	public void autoConnectGUI()
 	{
-		new gui.gameGUI();
-		System.out.println("finished running constructor call");
+		
+	}
+	public void manualConnectGUI()
+	{
+		
 	}
 	
-	private static void autoConnectServer()
+	public void loadGUI()
 	{
+		
 	
+		try 
+		{
+			autoConnectGUI(); 
+			
+		} catch(Exception e) 
+		{
+			manualConnectGUI(); 
+			e.printStackTrace();
+			
+		}
 	}
-	
-	private static void manualConnectServer()
-	{
-		 gameClient client = new gameClient("localhost", 8300);
-	        try {
-	            client.openConnection();
 
-	            myAction action = new myAction(0, "ROLL");
-	            client.sendToServer(action);
-
-	        } catch (Exception e) {
-	            System.out.println("Could not connect.");
-	        }
+	// =============== run on console ==========
+	private int mainMenu()
+	{
+		int choice; 
+		String menue = """
+				
+				:: this is the main cli tester menu :: 
+				
+				1.) view player count
+				2.) view server info
+				3.) view player status
+				4.) view game status
+				5.) make move
+				6.) disconnect server
+			
+				""";
+		System.out.println(menue); 
+		
+		choice = (new Scanner(System.in)).nextInt(); 
+		return choice; 
 	}
 	
+	private void menuDriver(int choice, gameClient cso)
+	{
+		switch (choice){
+			
+			case 1:
+				System.out.println("playerCount :: " ); 
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			default:
+				System.out.println("invalidOption");
+				break;
+			}
+	}
+	
+	public void cliSimulator(gameClient clientSideObj)
+	{
+			
+		if(clientSideObj.checkServerConnection() == true)
+		{	
+			do 
+			{
+				int choice = mainMenu(); 
+				menuDriver(choice, clientSideObj);
+					
+			}while(clientSideObj.checkServerConnection() == true);
+		}
+		else
+		{
+			System.out.println(":: ERROR connect to server ERROR ::");
+		}
+	}
+	
+	// ================= main client method ===========
 	public static void main(String[] args)
 	{
-	
-		manualConnectServer(); 
+		clientMain newPlayer = new clientMain();
 		
+		gameClient joiningClient = new gameClient();
+		newPlayer.cliSimulator(joiningClient);
 		
 	}
+	
+	// ============== constructor
+	public clientMain() {}
 }

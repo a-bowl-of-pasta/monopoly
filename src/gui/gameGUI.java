@@ -5,6 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+
 public class gameGUI extends JFrame {
     private JPanel mainPanel;
     private static final Color BOARD_COLOR = new Color(204, 232, 218);
@@ -16,6 +22,7 @@ public class gameGUI extends JFrame {
 
     private JLabel rollResultLabel;
 
+    
     private static final String[] TILE_TEXTS = {
         "GO\nCollect $200", "Mediterranean Avenue\n$60", "COMMUNITY CHEST", "Baltic Avenue\n$60", "Income Tax\nPay $200",
         "Reading Railroad\n$200", "Oriental Avenue\n$100", "CHANCE", "Vermont Avenue\n$100", "Connecticut Avenue\n$120",
@@ -43,11 +50,11 @@ public class gameGUI extends JFrame {
         new Color(0, 128, 0), new Color(0, 128, 0), null, new Color(0, 128, 0),
         null, null, new Color(0, 0, 139), null, new Color(0, 0, 139)
     };
-
+   
     public gameGUI() {
         this.setTitle("Monopoly");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(880,880);
+        this.setSize(880, 880);
         this.setMinimumSize(new Dimension(880, 880));
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -66,6 +73,24 @@ public class gameGUI extends JFrame {
         this.pack();
 
         initPlayerIcons();
+
+        // === POP UP PLAYER PANEL WINDOW ===
+        System.out.println("Launching playerPanel window...");
+
+        JFrame playerFrame = new JFrame("Player Info");
+        playerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        playerFrame.setSize(300, 500);
+        playerFrame.setLocation(this.getX() + this.getWidth(), this.getY());
+
+        playerPanel panel = new playerPanel(
+            "Player1",
+            1500,
+            Arrays.asList("Boardwalk", "Baltic Avenue"),
+            Arrays.asList("ROLL", "BUY_TILE", "END_TURN")
+        );
+
+        playerFrame.add(panel);
+        playerFrame.setVisible(true);
     }
 
     private void setSouthPanel() {
@@ -134,7 +159,7 @@ public class gameGUI extends JFrame {
                 rollResultLabel.setText("Roll: " + roll);
 
                 int newPosition = (playerPositions[0] + roll) % 40;
-                updatePlayerPosition(0, newPosition); // Only move red circle (Player 1)
+                updatePlayerPosition(0, newPosition);
             }
         });
 
