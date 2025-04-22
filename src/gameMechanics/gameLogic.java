@@ -10,15 +10,19 @@ public class gameLogic implements Serializable{
 	
 	// ============= performs the action and changes gameState
 	public void performGameAction(Object action, ConnectionToClient client, gameState currentState) {
+		
+		// stops method if player action is not sent
 	    if (!(action instanceof myAction)) return;
 
+	    // finds player from action
 	    myAction move = (myAction) action;
-	    
 	    int playerID = move.getPlayerID();
 	    
+	    // extracts the exact move the player did "ROLL", "END_TURN"
 	    String playerMove = move.getPlayerMove();
 	    player currentPlayer = currentState.currentPlayerObj();
 
+	    // handles decision making
 	    switch (playerMove) {
 	        case "ROLL":
 	            int roll = rollDice();
@@ -49,6 +53,10 @@ public class gameLogic implements Serializable{
 
 	public int rollDice()
 	{
+		/* finds rand num 1 - 6 
+		 * does that for both dice
+		 * adds them together and returns
+		 */
 		Random random = new Random(System.currentTimeMillis());
 		
 		int dice1 = random.nextInt(6) +1;
@@ -61,15 +69,20 @@ public class gameLogic implements Serializable{
 	private void manageTile(player currentPlayer, gameState currentGameState)
 	{
 		
+		// grabs the tile at current player position and tile ownership map
 		 tileInfo tile = currentGameState.getTileAt(currentPlayer.getBoardPostition());
 		 HashMap<tileInfo, player> propertiesOwned = currentGameState.propertiesOwnedHashMap(); 
 
-		    if (tile.isOwned() && !propertiesOwned.get(tile).equals(currentPlayer)) {
-		        int rent = tile.getRent();
-		        currentPlayer.manipMoney(-rent);
-		        currentGameState.propertiesOwned.get(tile).manipMoney(rent); // pay to owner
-		        System.out.println("Paid rent of " + rent);
-		    }
+		 // if the tile has an owner and the current player is not the owner
+		 if (tile.isOwned() && !propertiesOwned.get(tile).equals(currentPlayer)) 
+		 { 
+			 // get the rent, remove from current player, add to player that owns property, confirm
+			 int rent = tile.getRent();		      
+			 currentPlayer.manipMoney(-rent);
+	         propertiesOwned.get(tile).manipMoney(rent); // pay to owner
+	         System.out.println("Paid rent of " + rent);
+	         
+		   }
 		
 	}
 	
@@ -79,13 +92,14 @@ public class gameLogic implements Serializable{
 	
 	private void sellTile(player currentPlayer, gameState currentGameState)
 	{
-		
+		// gets the current player tile
 		tileInfo currentTile = currentGameState.getTileAt(currentPlayer.getBoardPostition());
-
+		HashMap<tileInfo, player> propertiesOwned = currentGameState.propertiesOwnedHashMap(); 
 		
-	    if (currentGameState.propertiesOwned.containsKey(currentTile) &&
-	        currentGameState.propertiesOwned.get(currentTile).equals(currentPlayer)) {
+		// if the current property is owned and the current player is the currenPlayer is the owner 
+	    if (currentTile.isOwned() && propertiesOwned.get(currentTile).equals(currentPlayer)) {
 	        
+	    	// pay current player, remove from ownership map, set currentTile ownership to false
 	        currentPlayer.manipMoney(currentTile.getPrice()); 
 	        currentGameState.soldProperty(currentTile, currentPlayer);
 	        currentTile.tileIsSold(); 
@@ -97,10 +111,14 @@ public class gameLogic implements Serializable{
 	}
 	private void buyTile(player currentPlayer, gameState currentGameState)
 	{
+		// get current tile
 		 tileInfo currentTile = currentGameState.getTileAt(currentPlayer.getBoardPostition()); 
-		    
+		 
+		   
+		 // if the current tile is not owned and the current player has enough money
 		 if (!currentTile.isOwned() && currentPlayer.getMoney() >= currentTile.getPrice()) {
 		 
+			 // remove player money, update the ownership map, update current tile ownership
 			 currentPlayer.manipMoney(- currentTile.getPrice());
 			 currentGameState.boughtProperty(currentTile, currentPlayer);
 			 currentTile.tileBought();
@@ -109,7 +127,7 @@ public class gameLogic implements Serializable{
 		 }
 			
 	}
-	// ================ constructor and toString / debugging
+	// ================ toString for debugging, logging, and cli 
 	public String toStringGameState(Object action, ConnectionToClient client, gameState currentState)
 	{
 		return currentState.toString();
@@ -131,6 +149,8 @@ public class gameLogic implements Serializable{
 		player currentPlay = currentState.currentPlayerObj();
 		return currentPlay.toString();  
 	}
+	
+	// ========== constructor
 	gameLogic(){}
 	
 }

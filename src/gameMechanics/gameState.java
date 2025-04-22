@@ -11,10 +11,12 @@ public class gameState implements Serializable{
 	private int nextPlayerIndex; 
 	private int numOfPlayers; 
 	private int totalTiles; 
-	ArrayList<player> playerList; 
-	HashMap<tileInfo, player>propertiesOwned;
-	ArrayList<tileInfo> linearBoard; 
 	
+	private ArrayList<player> playerList; 
+	private HashMap<tileInfo, player>propertiesOwned;
+	private ArrayList<tileInfo> linearBoard; 
+	
+	// =========== constructor
 	public gameState()
 	{
 		currentPlayerIndex = 0; 
@@ -36,19 +38,24 @@ public class gameState implements Serializable{
 		
 		
 	}
-	// -------- adds a new player to the game state
+	
+	// ==================== short methods
 	public void addPlayers(player addedPlayer)
 	{
+		// add player to gameState and increase playerCount
 		playerList.add(addedPlayer);
 		numOfPlayers++; 
 	}
+	
 	public void nextPlayersTurn()
 	{
+		// find the next player to take a turn
 		currentPlayerIndex = nextPlayerIndex;  
 		nextPlayerIndex = (nextPlayerIndex +1) % numOfPlayers; 
 	}
 	public void boughtProperty(tileInfo tileBought, player ownerPlayer)
 	{
+		// if property is bought and map doesn't clash, add new ownership relation
 		if(propertiesOwned.containsKey(tileBought) == false)
 		{
 			propertiesOwned.put(tileBought, ownerPlayer); 
@@ -56,14 +63,16 @@ public class gameState implements Serializable{
 	}
 	public void soldProperty(tileInfo tileSold, player soldPlayer)
 	{
+		// if property is sold and all is valid, remove ownership relation
 		if(propertiesOwned.containsKey(tileSold) && propertiesOwned.get(tileSold).equals(soldPlayer) )
 		{
 			propertiesOwned.remove(tileSold); 
 		}
 	}
+	
 	public void checkGameOver()
 	{
-		
+		// 
 		for (player p : playerList) {
 	        
 			if (p.getMoney() <= 0) {
@@ -89,23 +98,23 @@ public class gameState implements Serializable{
 	
 	public int currentPlayerIndex() { return currentPlayerIndex;}
 	public player currentPlayerObj() {return playerList.get(currentPlayerIndex); }
+	
+	
 	public int playerCount() {return numOfPlayers;}
+	
+	
 	public int getNextPlayer() {return nextPlayerIndex;}
 	public player nextPlayerObj() {return playerList.get(nextPlayerIndex); }
+	
+	
 	public int getTileCount() {return totalTiles; }
 	public tileInfo getTileAt(int i) {return linearBoard.get(i); }
+	
 	public HashMap<tileInfo, player> propertiesOwnedHashMap(){return propertiesOwned; }
 	
-	// ======== to string and debugging
-	public String currentPlayerName()
-	{
-		
-		return playerList.get(currentPlayerIndex).getUsername();
-	}
-	public String currentPlayerInfo()
-	{
-		return playerList.get(currentPlayerIndex).toString();
-	}
+	// ====================== to string getters for debugging
+	public String currentPlayerName() {return playerList.get(currentPlayerIndex).getUsername();}
+	public String currentPlayerInfo() {return playerList.get(currentPlayerIndex).toString();}
 	public String printBoardOwnership()
 	{
 		if(propertiesOwned.size() > 0)
@@ -123,6 +132,7 @@ public class gameState implements Serializable{
 		}
 	}
 	
+	// ======================= to string of this class for debuggingi
 	public String toString() {
 	    return "GameState: " + playerCount() + " players\nCurrent turn: " + currentPlayerObj().getUsername() + "\nnext player: " +
 	    			nextPlayerObj().username + "\nproperty ownership map size :" + propertiesOwned.size();

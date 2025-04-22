@@ -11,7 +11,7 @@ public class tileInfo implements Serializable{
 	private boolean tileOwned;  
 	
 	
-	
+	// ================= constructor
 	public tileInfo(int boardIndex, String tileType, int tilePrice, int rentAmt)
 	{
 		this.boardIndex = boardIndex; 
@@ -20,15 +20,20 @@ public class tileInfo implements Serializable{
 		rent = rentAmt; 
 	}
 	
+	// =============== setters 
 	public void tileBought() {tileOwned = true;}
-	public boolean isOwned() { return tileOwned;}
 	public void tileIsSold() {tileOwned = false; }
+	
+	// ========= getters
+	public boolean isOwned() { return tileOwned;}
+	
 	public int getPrice() {return tilePrice; }
 	public int getRent() {return rent; }
-	public String getTileType() {return tileType; }
 	public int tilePositionOnBoard() {return boardIndex; }
+
+	public String getTileType() {return tileType; }
 	
-	
+	// ================= overwrites for debugging and equality checks
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
